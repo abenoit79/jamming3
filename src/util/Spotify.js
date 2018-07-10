@@ -1,5 +1,5 @@
 //necessary imports
-import React from 'react';
+//import React from 'react';
 
 //variables for Spotify access
 let accessToken = '';
@@ -7,7 +7,7 @@ let expiresIn = '';
 const client_id = '23506449f1aa491c9950cfbdeb640077';
 const redirect_uri = 'http://localhost:3000/';
 //create Spotify module
-class Spotify extends React.Component{
+const Spotify = {
   //methods
   getAccessToken(){
     if (accessToken) {
@@ -25,6 +25,7 @@ class Spotify extends React.Component{
         //clear token and expiration
         window.setTimeout(() => accessToken = '', expiresIn * 1000);
         window.history.pushState('Access Token', null, '/');
+        return accessToken;
       }
       //token empty and not in URL
       else {
@@ -32,11 +33,10 @@ class Spotify extends React.Component{
         window.location=urlstring;
       }
     }
-    return accessToken;
-  }
+  },
 
   search(searchTerm) {
-    this.getAccessToken();
+    const accessToken = Spotify.getAccessToken();
     return fetch(`https://api.spotify.com/v1/search?type=track&q=${searchTerm}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -56,7 +56,7 @@ class Spotify extends React.Component{
         }
         //map values for tracks
         else {
-          return jsonResponse.tracks.itmes.map(track => ({
+          return jsonResponse.tracks.items.map(track => ({
             id: track.id,
             name: track.name,
             artist: track.artists[0].name,
@@ -65,7 +65,7 @@ class Spotify extends React.Component{
           }));
         }
     });
-  }
+  },
 
   savePlaylist(playlistName, trackURIs) {
     const headers = {Authorization: `Bearer ${accessToken}`};
@@ -90,7 +90,7 @@ class Spotify extends React.Component{
             let playlist_id = jsonResponse.id;
             return fetch(`https://api.spotify.com/v1/users/${user_id}/playlists/${playlist_id}/tracks`,
             {
-              headers: {Authorization: `Bearer ${accessToken}`, "Content-Type": 'applicaiton/json'},
+              headers: {Authorization: `Bearer ${accessToken}`, "Content-Type": 'application/json'},
               method: 'POST',
               body: JSON.stringify({uris: trackURIs})
             });

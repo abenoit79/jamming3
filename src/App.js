@@ -8,7 +8,7 @@ import Spotify from './util/Spotify.js';
 
 //hard coded values for playlist
 const playlistName = 'Test List';
-const playlistTracks = [{name: 'Song1', artist: 'Artist1', album: 'Album1', id: 12345}, {name: 'Song2', artist: 'Artist2', album: 'Album2', id: 67890}];
+const playlistTracks = [];
 
 class App extends Component {
   //App constructor
